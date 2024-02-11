@@ -1,0 +1,49 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { faker } from '@faker-js/faker';
+
+import { FillFormComponent } from './fill-form.component';
+
+describe('FillFormComponent', () => {
+  let component: FillFormComponent;
+  let fixture: ComponentFixture<FillFormComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [FillFormComponent],
+      imports: [
+        ReactiveFormsModule,
+        FormsModule
+      ]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(FillFormComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it("should fill the form field", () => {
+    const input:HTMLInputElement = fixture.debugElement.query(By.css('input')).nativeElement
+    const word = faker.word.sample();
+    input.value = word;
+    input.dispatchEvent(new Event('input'))
+
+    expect(input.value).toBe(word)
+  })
+
+  describe('fillForm', () => {
+    it("should formControl 'name' with name model", () => {
+      const word = faker.word.sample();
+      component.name = word;
+      component.fillForm();
+
+      expect(component.form.controls['name'].value).toBe(word)
+    })
+  })
+});
